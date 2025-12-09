@@ -2,29 +2,29 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import AdminHeader from '@/components/ui/AdminHeader';
 import Footer from '@/components/Footer';
-import ServiceCard from '@/components/ServiceCard';
 import AllServiceCard from '@/components/ui/allservicecard';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Search } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext'; // ✅ Make sure this path is correct
 
-
-
-const fetchServices = async () => {
-  const response = await fetch(import.meta.env.VITE_BACKEND_SERVER+'api/services');
+// ✅ Updated fetchServices to take userId
+const fetchServices = async (userId) => {
+  const response = await fetch(`${import.meta.env.VITE_BACKEND_SERVER}api/services/vendor/${userId}`);
   if (!response.ok) {
     throw new Error('Failed to fetch services');
   }
   return response.json();
 };
 
-
-
-const AllServices = () => {
+const AllVendorServices = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const { user } = useAuth(); // ✅ Access current user
+
   const { data: services, isLoading, error } = useQuery({
-    queryKey: ['services'],
-    queryFn: fetchServices,
+    queryKey: ['services', user?._id],
+    queryFn: () => fetchServices(user._id),
+    enabled: !!user, // ✅ wait for user to load
   });
 
   const filteredServices = services?.filter(service =>
@@ -39,7 +39,6 @@ const AllServices = () => {
       <main className="flex-1 container mx-auto px-4 py-12">
         <div className="mb-10">
           <h1 className="text-3xl font-bold mb-2">List of All Repair Services</h1>
-         
         </div>
 
         <div className="relative mb-8 max-w-md">
@@ -84,4 +83,4 @@ const AllServices = () => {
   );
 };
 
-export default AllServices;
+export default AllVendorServices;

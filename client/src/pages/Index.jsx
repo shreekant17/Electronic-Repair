@@ -5,10 +5,11 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
+import AdminHeader from '@/components/ui/AdminHeader';
 
 const Index = () => {
   const [loaded, setLoaded] = useState(false);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   useEffect(() => {
     setLoaded(true);
@@ -60,8 +61,12 @@ const Index = () => {
   ];
 
   return (
-      <div className="min-h-screen flex flex-col">
-        <Header />
+    <div className="min-h-screen flex flex-col">
+      {(user?.isAdmin || user?.isVendor) ? (
+        <AdminHeader/>
+      ):(<Header />)
+      }
+        
         
         {/* Hero section */}
         <section className="relative min-h-[85vh] flex flex-col justify-center items-center text-center px-4 bg-gradient-to-b from-background to-background/95">
@@ -76,7 +81,9 @@ const Index = () => {
               Fast, reliable repairs for all your electronic devices.
               Professional technicians and quality parts guaranteed.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+          <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+            {(!user?.isAdmin && !user?.isVendor) ? (
+            <>
               <Button size="lg" asChild>
                 <Link to={isAuthenticated ? "/repairs" : "/register"}>
                   {isAuthenticated ? "Request Repair" : "Get Started"}
@@ -87,6 +94,15 @@ const Index = () => {
                   Browse Services
                 </Link>
               </Button>
+            </>
+          ) : (
+            <Button size="lg" asChild>
+              <Link to={user?.isAdmin ? "/admin" : "/vendor"}>
+                Go to Dashboard
+              </Link>
+            </Button>
+          )}
+
             </div>
           </div>
           

@@ -27,7 +27,7 @@ const fetchUserRepairs = async (token, userId) => {
 };
 
 const fetchUserAppointments = async (token) => {
-  const response = await fetch('https://electronic-repair-server.vercel.app/api/appointments', {
+  const response = await fetch(import.meta.env.VITE_BACKEND_SERVER+'api/appointments', {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -335,7 +335,7 @@ const Dashboard = () => {
                             Method: {payment.paymentMethod}
                           </span>
                           <span className="font-medium">
-                            ${payment.amount.toFixed(2)}
+                            ₹{payment.amount.toFixed(2)}
                           </span>
                         </div>
                         <div className="flex items-center text-sm text-muted-foreground">

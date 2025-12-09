@@ -189,7 +189,7 @@ const RepairDetail = () => {
                   <div>
                     <CardTitle>Repair #{repair._id.substring(0, 8)}</CardTitle>
                     <CardDescription>
-                      {repair.service.name} - {formatDate(repair.createdAt)}
+                      {repair.serviceId.name} - {formatDate(repair.createdAt)}
                     </CardDescription>
                   </div>
                   <Badge variant={statusToBadgeVariant[repair.status]}>
@@ -214,7 +214,7 @@ const RepairDetail = () => {
                     <h3 className="text-sm font-medium text-muted-foreground mb-2">
                       Estimated Cost
                     </h3>
-                    <p className="text-xl font-semibold">${repair.estimatedCost.toFixed(2)}</p>
+                    <p className="text-xl font-semibold">₹{repair.estimatedCost.toFixed(2)}</p>
                   </div>
 
                   {repair.finalCost && (
@@ -236,15 +236,15 @@ const RepairDetail = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <p className="text-sm text-muted-foreground">Name</p>
-                      <p className="text-base">{repair.service.name}</p>
+                      <p className="text-base">{repair.serviceId.name}</p>
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Estimated Time</p>
-                      <p className="text-base">{repair.service.estimatedTime}</p>
+                      <p className="text-base">{repair.serviceId.estimatedTime}</p>
                     </div>
                     <div className="col-span-2">
                       <p className="text-sm text-muted-foreground">Description</p>
-                      <p className="text-base">{repair.service.description}</p>
+                      <p className="text-base">{repair.serviceId.description}</p>
                     </div>
                   </div>
                 </div>

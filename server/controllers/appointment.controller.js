@@ -19,7 +19,12 @@ export const getAppointments = async (req, res, next) => {
   try {
     const query = req.user.isAdmin ? {} : { userId: req.user._id };
     const appointments = await Appointment.find(query)
-      .populate('repairRequestId')
+      .populate({
+        path: 'repairRequestId',
+        populate: {
+          path: 'serviceId', // 👈 this is the nested populate
+        }
+      })
       .populate('userId', 'email')
       .sort({ scheduledDateTime: 1 });
     res.json(appointments);
@@ -27,6 +32,9 @@ export const getAppointments = async (req, res, next) => {
     next(error);
   }
 };
+
+
+
 
 export const updateAppointment = async (req, res, next) => {
   try {
@@ -40,7 +48,7 @@ export const updateAppointment = async (req, res, next) => {
       { new: true }
     );
     if (!appointment) {
-      return res.status(404).json({ message: 'Appointment not found' });
+      return res.status(404).json({ message: 'Appointment not found in DB' });
     }
     res.json(appointment);
   } catch (error) {
@@ -59,7 +67,7 @@ export const deleteAppointment = async (req, res, next) => {
       { new: true }
     );
     if (!appointment) {
-      return res.status(404).json({ message: 'Appointment not found' });
+      return res.status(404).json({ message: 'Appointment not found in DB' });
     }
     res.json({ message: 'Appointment canceled successfully' });
   } catch (error) {

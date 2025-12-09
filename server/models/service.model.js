@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 
 const serviceSchema = new mongoose.Schema({
+  vendorId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   name: {
     type: String,
     required: true
@@ -19,7 +24,11 @@ const serviceSchema = new mongoose.Schema({
   },
   active: {
     type: Boolean,
-    default: true
+    default: false
+  },
+  isEnabled: {
+    type: Boolean,
+    default: false
   }
 });
 
